@@ -1,15 +1,17 @@
 package org.example;
 
+import chatRoom.ChatRoomInput;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 
 public class Server {
     private static ServerSocket serverSocket;
-    private static boolean chat = false;
 
     public static void main(String[] args){
         ArrayList<HandlingClient> allHandlingClients = new ArrayList<HandlingClient>();
+        ChatInput chatInput =  new ChatInput(allHandlingClients);
 
         try {
             serverSocket = new ServerSocket(4242);
@@ -30,11 +32,4 @@ public class Server {
         }
     }
 
-    public static boolean inChat(){
-        return chat;
-    }
-
-    public synchronized static void setChat(boolean val){
-        chat = val;
-    }
 }

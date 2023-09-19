@@ -12,7 +12,7 @@ public class HandlingClient  extends  Thread{
     private ObjectOutputStream output;
     private ObjectInputStream input;
     private boolean connected = true;
-    private static boolean chat = false;
+    private boolean chat = false;
 
     private ChatRoom chatRoom = null;
 
@@ -42,7 +42,7 @@ public class HandlingClient  extends  Thread{
                         System.out.println(socket.getInetAddress().getHostAddress() + " abriu um chat");
                         chatRoom = new ChatRoom(input, output, socket.getInetAddress().getHostAddress(), this);
                     }
-                }else {
+                }else if(!socket.isClosed()){
                     String menssage = (String) input.readObject();
                     System.out.println("Mensagem recebida do cliente " + socket.getInetAddress().getHostAddress() + ": " + menssage);
 
@@ -54,9 +54,7 @@ public class HandlingClient  extends  Thread{
                         sendFile(file);
 
                     } else if (((String) menssage).equals("CHAT")) {
-                        if(!Server.inChat()){
                             setInChat(true);
-                        }
                     }
                 }
             } catch (IOException e) {
@@ -69,11 +67,14 @@ public class HandlingClient  extends  Thread{
 
     public synchronized void setInChat(boolean val){
         chat = val;
-        Server.setChat(val);
 
         if(!val){
             chatRoom = null;
         }
+    }
+
+    public boolean inChat(){
+        return  chat;
     }
 
 
@@ -99,21 +100,27 @@ public class HandlingClient  extends  Thread{
 
     }
 
-    private void close(){
+    public void close(){
         try {
             output.flush();
             output.writeObject(true);
             socket.close();
+            output.close();
+            input.close();
             connected = false;
             System.out.println("Cliente " + socket.getInetAddress().getHostAddress() +  " saiu!");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        this.interrupt();
+        remove();
     }
 
     private void remove(){
         clientsList.remove(this);
+    }
+
+    public ChatRoom getChatRoom(){
+        return chatRoom;
     }
 }

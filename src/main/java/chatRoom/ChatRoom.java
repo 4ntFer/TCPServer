@@ -18,8 +18,11 @@ public class ChatRoom {
         this.client = client;
         this.handlingClient = handlingClient;
 
-        chatRoomOutput.start();
         chatRoomInput.start();
+    }
+
+    public ChatRoomOutput getChatRoomOutput(){
+        return chatRoomOutput;
     }
 
 
@@ -27,8 +30,7 @@ public class ChatRoom {
         System.out.println(client+" encerrou o chat");
         handlingClient.setInChat(false);
         isRunning = false;
-        chatRoomInput.close();
-        chatRoomOutput.close();
+        handlingClient.close();
     }
 
     public boolean isRunning() {
