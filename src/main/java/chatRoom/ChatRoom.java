@@ -12,6 +12,7 @@ public class ChatRoom {
     private HandlingClient handlingClient;
     private String client;
 
+    // Faz a comunicação quando em chat
     public ChatRoom(ObjectInputStream input, ObjectOutputStream output, String client, HandlingClient handlingClient){
         chatRoomInput = new ChatRoomInput(input,client, this);
         chatRoomOutput = new ChatRoomOutput(output, this);

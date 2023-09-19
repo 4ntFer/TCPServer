@@ -6,13 +6,17 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
+
+/*
+*  Toda a comunicação que o servidor faz com um cliente
+* */
 public class HandlingClient  extends  Thread{
     private Socket socket;
-    private ArrayList<HandlingClient> clientsList;
-    private ObjectOutputStream output;
-    private ObjectInputStream input;
+    private ArrayList<HandlingClient> clientsList; // lista de todas as comunicações abertas com clientes
+    private ObjectOutputStream output; //saída do cliente
+    private ObjectInputStream input; //entrrada no cliente
     private boolean connected = true;
-    private boolean chat = false;
+    private boolean chat = false; //Diz se o cliente está ou não em um chat
 
     private ChatRoom chatRoom = null;
 
@@ -65,6 +69,7 @@ public class HandlingClient  extends  Thread{
         }
     }
 
+
     public synchronized void setInChat(boolean val){
         chat = val;
 
@@ -77,7 +82,7 @@ public class HandlingClient  extends  Thread{
         return  chat;
     }
 
-
+    // Envia um arquivo ao cliente
     private void sendFile(WebFile file){
         System.out.println("Arquivo enviado ao cliente " + socket.getInetAddress().getHostAddress());
 
